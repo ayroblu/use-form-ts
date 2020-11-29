@@ -1,5 +1,6 @@
 import React from "react";
-import { ObjectKeys } from "./utils";
+
+import { useIsMounted } from "./hooks";
 import {
   ControlledParams,
   NamedValidationParams,
@@ -8,7 +9,7 @@ import {
   AdaptedFormItemParams,
   AdaptedValidationParams,
 } from "./useFormTypes";
-import { useIsMounted } from "./hooks";
+import { ObjectKeys } from "./utils";
 import { validator } from "./validators";
 
 /**
@@ -48,12 +49,12 @@ export const useControlledForm = <T extends {}>({
     });
     const errorText = getErrorText(values[key]);
     if (errorText instanceof Promise) {
-      if (validationParams.customAsync) {
+      if (validationParams.customAsync)
         setErrors({
           ...errors,
           [key]: validationParams.customAsync.handleLoading(values[key]),
         });
-      }
+
       errorText
         .then(
           (errorText) =>
@@ -123,9 +124,7 @@ const getErrorTextFn = <T extends {}, K extends keyof T>({
       const result = custom(value);
       if (result) return result;
     }
-    if (customAsync) {
-      return customAsync.validator(value);
-    }
+    if (customAsync) return customAsync.validator(value);
   }
   return null;
 };
@@ -143,11 +142,9 @@ export const useLocalForm = <T>({ initialData }: LocalParams<T>) => {
 export const useControlledSubForm = <T extends {}>({
   values,
   onChange,
-}: ControlledSubParams<T>) => {
-  return {
-    ...useControlledForm({
-      values,
-      onChange: (val) => onChange({ ...values, ...val }),
-    }),
-  };
-};
+}: ControlledSubParams<T>) => ({
+  ...useControlledForm({
+    values,
+    onChange: (val) => onChange({ ...values, ...val }),
+  }),
+});

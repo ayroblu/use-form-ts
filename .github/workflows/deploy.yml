@@ -6,9 +6,9 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ gh-pages-pre ]
+    branches: [ gh-pages-src ]
   pull_request:
-    branches: [ gh-pages-pre ]
+    branches: [ gh-pages-src ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

@@ -15,8 +15,6 @@
     "lint": "eslint src --ext .ts --ext .tsx"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.165",
-    "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
@@ -29,7 +27,5 @@
   "peerDependencies": {
     "react": "^17.0.1"
   },
-  "dependencies": {
-    "lodash": "^4.17.20"
-  }
+  "dependencies": {}
 }

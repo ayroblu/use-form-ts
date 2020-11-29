@@ -6,6 +6,9 @@
   "repository": "github.com/ayroblu/use-form-ts",
   "author": "Ben Lu",
   "license": "ISC",
+  "files": [
+    "dist"
+  ],
   "private": true,
   "scripts": {
     "build": "rm -rf dist && tsc",

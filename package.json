@@ -1,6 +1,6 @@
 {
   "name": "use-form-ts",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Hooks for forms with TypeScript",
   "main": "dist/index.js",
   "repository": "github.com/ayroblu/use-form-ts",
@@ -9,7 +9,6 @@
   "files": [
     "dist"
   ],
-  "private": true,
   "scripts": {
     "build": "rm -rf dist && tsc",
     "lint": "eslint src --ext .ts --ext .tsx"

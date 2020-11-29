@@ -1,0 +1,37 @@
+.BasicForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+.row {
+  display: flex;
+  margin-bottom: 10px;
+}
+.row > label {
+  margin-right: 10px;
+  margin-top: 4px;
+  width: 150px;
+  text-align: right;
+}
+.inputContainer > input:not([type="checkbox"]) {
+  padding: 4px;
+  font-size: 1rem;
+  width: 100%;
+}
+.row input[type="checkbox"] {
+  height: 1.5rem;
+}
+.flexRow {
+  display: flex;
+}
+.flexRow > label {
+  margin-left: 4px;
+}
+.error {
+  color: red;
+}
+.inputContainer {
+  width: 200px;
+  text-align: left;
+}

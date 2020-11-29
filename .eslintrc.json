@@ -1,0 +1,53 @@
+{
+  "plugins": ["@typescript-eslint", "import", "sort-destructure-keys"],
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "prefer-template": "error",
+    "no-useless-concat": "error",
+    "arrow-body-style": "error",
+    "no-extra-boolean-cast": "error",
+    "curly": ["error", "multi", "consistent"],
+    "dot-notation": "error",
+    "eqeqeq": "error",
+    "prefer-const": "error",
+    "prefer-destructuring": "error",
+    "import/no-unresolved": "off",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc"
+        },
+        "pathGroups": [
+          {
+            "pattern": "@hlsp/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "./*",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "unknown",
+          "parent",
+          "sibling",
+          "index"
+        ]
+      }
+    ]
+  }
+}

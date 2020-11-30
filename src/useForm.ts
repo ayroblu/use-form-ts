@@ -25,7 +25,7 @@ import { validator } from "./validators";
  *
  * Does not support onChange with multiple params
  */
-export const useControlledForm = <T extends {}>({
+export const useForm = <T extends {}>({
   values,
   onChange,
 }: ControlledParams<T>) => {
@@ -132,18 +132,18 @@ const getErrorTextFn = <T extends {}, K extends keyof T>({
 export const useLocalForm = <T>({ initialData }: LocalParams<T>) => {
   const [formState, setFormState] = React.useState(initialData);
   return {
-    ...useControlledForm({
+    ...useForm({
       values: formState,
       onChange: (val) => setFormState({ ...formState, ...val }),
     }),
     getValues: () => formState,
   };
 };
-export const useControlledSubForm = <T extends {}>({
+export const useSubForm = <T extends {}>({
   values,
   onChange,
 }: ControlledSubParams<T>) => ({
-  ...useControlledForm({
+  ...useForm({
     values,
     onChange: (val) => onChange({ ...values, ...val }),
   }),

@@ -1,0 +1,13 @@
+.input {
+  padding: 5px 10px;
+  display: block;
+}
+.inputLabel {
+  margin-right: 4px;
+}
+.error {
+  color: red;
+}
+.submit {
+  margin: 5px 10px;
+}

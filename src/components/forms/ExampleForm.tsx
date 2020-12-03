@@ -1,0 +1,81 @@
+import React from "react";
+import styles from "./ExampleForm.module.css";
+import { useForm } from "use-form-ts";
+
+export const ExampleForm = () => {
+  const [state, setState] = React.useState({
+    form: { firstname: "", lastname: "" },
+    log: [] as string[],
+  });
+  const form = useForm({
+    values: state.form,
+    onChange: (value) =>
+      setState({ ...state, form: { ...state.form, ...value } }),
+  });
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (form.validate()) {
+      setState({
+        ...state,
+        log: state.log.concat(`Result: ${JSON.stringify(state.form)}`),
+      });
+    }
+  };
+  return (
+    <form onSubmit={handleSubmit}>
+      <h3>Example Form</h3>
+      {form.createFormItem("firstname", {
+        required: true,
+        adaptor: (e: React.ChangeEvent<HTMLInputElement>) => e.target.value,
+      })(({ props: { value, onChange, name }, errorText }) => (
+        <InputField
+          label="First Name"
+          value={value}
+          onChange={onChange}
+          name={name}
+          errorText={errorText || ""}
+        />
+      ))}
+      {form.createFormItem("lastname", {
+        required: true,
+        adaptor: (e: React.ChangeEvent<HTMLInputElement>) => e.target.value,
+      })(({ props: { value, onChange, name }, errorText }) => (
+        <InputField
+          label="Last Name"
+          value={value}
+          onChange={onChange}
+          name={name}
+          errorText={errorText || ""}
+        />
+      ))}
+      <input className={styles.submit} type="submit" value="Submit" />
+      <section>
+        {state.log.map((v, i) => (
+          <p key={i}>{v}</p>
+        ))}
+      </section>
+    </form>
+  );
+};
+
+type InputFieldProps = {
+  name: string;
+  label: string;
+  value: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  errorText: string;
+};
+const InputField: React.FC<InputFieldProps> = ({
+  name,
+  label,
+  errorText,
+  ...inputProps
+}) => {
+  return (
+    <label className={styles.input}>
+      <span className={styles.inputLabel}>{label}</span>
+      <input id={name} {...inputProps} />
+      <div className={styles.error}>{errorText}</div>
+    </label>
+  );
+};

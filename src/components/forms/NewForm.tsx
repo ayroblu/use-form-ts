@@ -1,5 +1,5 @@
 import React from "react";
-import { useControlledForm } from "use-form-ts";
+import { useForm } from "use-form-ts";
 import styles from "./NewForm.module.css";
 
 type MyFormResp = {
@@ -26,7 +26,7 @@ const initialValues: MyFormResp = {
  */
 export const NewForm: React.FC = () => {
   const [formState, setFormState] = React.useState(initialValues);
-  const form = useControlledForm({
+  const form = useForm({
     values: formState,
     onChange: (value: Partial<MyFormResp>) =>
       setFormState({ ...formState, ...value }),
@@ -72,7 +72,7 @@ type SubFormProps = {
   onChange: (value: MyFormResp["subForm"]) => void;
 };
 const SubForm: React.FC<SubFormProps> = ({ values, onChange }) => {
-  const form = useControlledForm({
+  const form = useForm({
     values,
     onChange: (value) => onChange({ ...values, ...value }),
   });

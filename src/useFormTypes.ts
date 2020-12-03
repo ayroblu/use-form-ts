@@ -2,29 +2,25 @@ export type ControlledParams<T extends {}> = {
   values: T;
   onChange: (value: Partial<T>) => void;
 };
-export type ControlledSubParams<T extends {}> = Omit<
-  ControlledParams<T>,
-  "onChange"
-> & {
-  onChange: (value: T) => void;
-};
 export type LocalParams<T extends {}> = {
   initialData: T;
 };
-type FormItemParams<T extends {}, K extends keyof T, A> = {
-  props: {
-    name: K;
-    value: T[K];
-    onChange: (value: A) => void;
-    onBlur: (value: A) => void;
-  };
+export type FormItemProps<T extends {}, K extends keyof T, M, A> = {
+  name: K;
+  value: T[K];
+  onChange: (value: A) => void;
+  onBlur: (value: A) => void;
   errorText: string | null;
+  meta: M;
 };
-export type AdaptedFormItemParams<
+export type AdaptedFormItemProps<
   T extends {},
   K extends keyof T,
+  M = undefined,
   A = undefined
-> = A extends undefined ? FormItemParams<T, K, T[K]> : FormItemParams<T, K, A>;
+> = A extends undefined
+  ? FormItemProps<T, K, M, T[K]>
+  : FormItemProps<T, K, M, A>;
 
 export type ValidationTypes =
   | {
@@ -48,11 +44,12 @@ type ValidationParams<T extends {}, K extends keyof T> = {
     handleCatch: (err: Error) => string;
   };
 } & ValidationTypes;
-export type AdaptedValidationParams<
+export type FormItemSetupParams<
   T extends {},
   K extends keyof T,
+  M,
   A
-> = ValidationParams<T, K> & { adaptor?: (input: A) => T[K] };
+> = ValidationParams<T, K> & { adaptor?: (input: A) => T[K]; meta?: M };
 export type NamedValidationParams<T extends {}, K extends keyof T> = {
   name: K;
 } & ValidationParams<T, K>;

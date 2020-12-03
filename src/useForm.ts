@@ -2,12 +2,11 @@ import React from "react";
 
 import { useIsMounted } from "./hooks";
 import {
+  AdaptedFormItemProps,
   ControlledParams,
-  NamedValidationParams,
+  FormItemSetupParams,
   LocalParams,
-  ControlledSubParams,
-  AdaptedFormItemParams,
-  AdaptedValidationParams,
+  NamedValidationParams,
 } from "./useFormTypes";
 import { ObjectKeys } from "./utils";
 import { validator } from "./validators";
@@ -37,11 +36,11 @@ export const useForm = <T extends {}>({
     {}
   );
 
-  const createFormItem = <K extends keyof T, A = undefined>(
+  const createFormItem = <K extends keyof T, M, A = undefined>(
     key: K,
-    { adaptor, ...validationParams }: AdaptedValidationParams<T, K, A> = {}
+    { adaptor, meta, ...validationParams }: FormItemSetupParams<T, K, M, A> = {}
   ) => (
-    formItem: (params: AdaptedFormItemParams<T, K, A>) => React.ReactNode
+    formItem: (params: AdaptedFormItemProps<T, K, M, A>) => React.ReactNode
   ) => {
     const getErrorText = getErrorTextFn<T, K>({
       name: key,
@@ -79,15 +78,15 @@ export const useForm = <T extends {}>({
       onChange({ [key]: value } as Pick<T, K> & Partial<T>);
       setTouched({ ...touched, [key]: true });
     };
+    // This function is not very typesafe, but necessary due to the adapter generic!
     return formItem({
-      props: {
-        name: key,
-        value: values[key],
-        onChange: onChangeHandler,
-        onBlur: onChangeHandler,
-      },
+      name: key,
+      value: values[key],
+      onChange: onChangeHandler,
+      onBlur: onChangeHandler,
       errorText: (touched[key] && errors[key]) || null,
-    } as AdaptedFormItemParams<T, K, A>);
+      meta,
+    } as AdaptedFormItemProps<T, K, M, A>);
   };
   const validate = () => {
     const allTouched = ObjectKeys(values).reduce<
@@ -114,7 +113,7 @@ const getErrorTextFn = <T extends {}, K extends keyof T>({
   ...typeParams
 }: NamedValidationParams<T, K>) => (value: T[K]) => {
   if (required && !value) {
-    return validationMessages?.required?.(name) ?? `${name} is required`;
+    return validationMessages?.required?.(name) ?? `field is required`;
   } else {
     if (typeof value === "string") {
       const result = validator(typeParams, value);
@@ -139,12 +138,3 @@ export const useLocalForm = <T>({ initialData }: LocalParams<T>) => {
     getValues: () => formState,
   };
 };
-export const useSubForm = <T extends {}>({
-  values,
-  onChange,
-}: ControlledSubParams<T>) => ({
-  ...useForm({
-    values,
-    onChange: (val) => onChange({ ...values, ...val }),
-  }),
-});

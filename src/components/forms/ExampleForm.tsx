@@ -27,26 +27,20 @@ export const ExampleForm = () => {
       {form.createFormItem("firstname", {
         required: true,
         adaptor: (e: React.ChangeEvent<HTMLInputElement>) => e.target.value,
-      })(({ props: { value, onChange, name }, errorText }) => (
-        <InputField
-          label="First Name"
-          value={value}
-          onChange={onChange}
-          name={name}
-          errorText={errorText || ""}
-        />
+        meta: {
+          label: "First Name",
+        },
+      })(({ errorText, meta: { label }, ...props }) => (
+        <InputField label={label} {...props} errorText={errorText || ""} />
       ))}
       {form.createFormItem("lastname", {
         required: true,
         adaptor: (e: React.ChangeEvent<HTMLInputElement>) => e.target.value,
-      })(({ props: { value, onChange, name }, errorText }) => (
-        <InputField
-          label="Last Name"
-          value={value}
-          onChange={onChange}
-          name={name}
-          errorText={errorText || ""}
-        />
+        meta: {
+          label: "Last Name",
+        },
+      })(({ errorText, meta: { label }, ...props }) => (
+        <InputField label={label} {...props} errorText={errorText || ""} />
       ))}
       <input className={styles.submit} type="submit" value="Submit" />
       <section>

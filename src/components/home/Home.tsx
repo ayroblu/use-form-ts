@@ -1,5 +1,6 @@
 import React from "react";
 import { ExampleForm } from "../forms/ExampleForm";
+import { KitchenSink } from "../forms/KitchenSink";
 
 export const Home: React.FC = () => {
   return (
@@ -17,6 +18,8 @@ export const Home: React.FC = () => {
       </section>
       <section>Example:</section>
       <ExampleForm />
+      <section>Kitchen Sink:</section>
+      <KitchenSink />
     </section>
   );
 };

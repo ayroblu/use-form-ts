@@ -11,11 +11,11 @@ const pattern = {
 export function validator(validationTypes: ValidationTypes, val: string) {
   switch (validationTypes.type) {
     case "email":
-      return pattern.email.test(val) ? "Not a valid email" : undefined;
+      return pattern.email.test(val) ? undefined : "Not a valid email";
     case "regex":
-      return validationTypes.regex.test(val) ? "Unexpected layout" : undefined;
+      return validationTypes.regex.test(val) ? undefined : "Unexpected layout";
     case "whitespace":
-      return val.trim().length ? "Not valid content" : undefined;
+      return val.trim().length ? undefined : "Not valid content";
     default:
       checkUnreachable(validationTypes);
   }

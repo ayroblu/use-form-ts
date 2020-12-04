@@ -14,6 +14,7 @@ export type FormItemProps<T extends {}, K extends keyof T, M, A> = {
   onBlur: (value: A) => void;
   errorText: string | null;
   meta: M;
+  isLoading: boolean;
 };
 
 export type AdaptedFormItemProps<
@@ -41,12 +42,8 @@ type ValidationParams<T extends {}, K extends keyof T, M> = {
       props: ValueProps<T, K, M>
     ) => string;
   };
-  custom?: (val: T[K]) => string;
-  customAsync?: {
-    validator: (val: T[K]) => Promise<string>;
-    handleLoading: (val: T[K]) => string;
-    handleCatch: (err: Error) => string;
-  };
+  custom?: (val: T[K]) => string | null;
+  customAsync?: (val: T[K]) => Promise<string | null>;
   validation?: ValidationTypes;
 };
 

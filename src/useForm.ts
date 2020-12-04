@@ -1,4 +1,5 @@
 import React from "react";
+
 import { useIsMounted } from "./hooks";
 import {
   AdaptedFormItemProps,
@@ -31,9 +32,12 @@ export const useForm = <T extends {}>({
   const [touched, setTouched] = React.useState<
     Partial<Record<keyof T, boolean>>
   >({});
-  const [errors, setErrors] = React.useState<Partial<Record<keyof T, string>>>(
-    {}
-  );
+  const [errors, setErrors] = React.useState<
+    { [key in keyof T]?: string | null }
+  >({});
+  const [loading, setLoading] = React.useState<
+    Partial<Record<keyof T, boolean>>
+  >({});
 
   const createFormItem = <K extends keyof T, M, A = undefined>(
     key: K,
@@ -49,14 +53,9 @@ export const useForm = <T extends {}>({
       },
       ...validationParams,
     });
-    const errorText = getErrorText(values[key]);
+    const errorText = loading ? getErrorText(values[key]) : null;
     if (errorText instanceof Promise) {
-      if (validationParams.customAsync)
-        setErrors({
-          ...errors,
-          [key]: validationParams.customAsync.handleLoading(values[key]),
-        });
-
+      setLoading({ ...loading, [key]: true });
       errorText
         .then(
           (errorText) =>
@@ -66,11 +65,15 @@ export const useForm = <T extends {}>({
           (err) =>
             getIsMounted() &&
             validationParams.customAsync &&
+            err instanceof Error &&
             setErrors({
               ...errors,
-              [key]: validationParams.customAsync.handleCatch(err),
+              [key]: err.message,
             })
-        );
+        )
+        .then(() => {
+          setLoading({ ...loading, [key]: false });
+        });
     } else if (errorText !== errors[key]) {
       setErrors({ ...errors, [key]: errorText });
     }
@@ -89,6 +92,7 @@ export const useForm = <T extends {}>({
       onBlur: onChangeHandler,
       errorText: (touched[key] && errors[key]) || null,
       meta,
+      isLoading: !!loading[key],
     } as AdaptedFormItemProps<T, K, M, A>);
   };
   const validate = () => {
@@ -99,7 +103,8 @@ export const useForm = <T extends {}>({
       return a;
     }, {});
     setTouched(allTouched);
-    return !Object.values(errors).filter((value) => value).length;
+    return !Object.values(errors).filter((value) => typeof value === "string")
+      .length;
   };
   return {
     createFormItem,
@@ -126,7 +131,7 @@ const getErrorTextFn = <T extends {}, K extends keyof T, M>({
       const result = custom(value);
       if (result) return result;
     }
-    if (customAsync) return customAsync.validator(value);
+    if (customAsync) return customAsync(value);
   }
   return null;
 };

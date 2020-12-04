@@ -9,7 +9,6 @@ const pattern = {
 };
 
 export function validator(validationTypes: ValidationTypes, val: string) {
-  if (!validationTypes.type) return;
   switch (validationTypes.type) {
     case "email":
       return pattern.email.test(val) ? "Not a valid email" : undefined;
@@ -18,7 +17,7 @@ export function validator(validationTypes: ValidationTypes, val: string) {
     case "whitespace":
       return val.trim().length ? "Not valid content" : undefined;
     default:
-      checkUnreachable(validationTypes.type);
+      checkUnreachable(validationTypes);
   }
   return;
 }

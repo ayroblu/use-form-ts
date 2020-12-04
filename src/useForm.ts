@@ -1,12 +1,11 @@
 import React from "react";
-
 import { useIsMounted } from "./hooks";
 import {
   AdaptedFormItemProps,
   ControlledParams,
   FormItemSetupParams,
   LocalParams,
-  NamedValidationParams,
+  ValidationParamsWithProps,
 } from "./useFormTypes";
 import { ObjectKeys } from "./utils";
 import { validator } from "./validators";
@@ -42,8 +41,12 @@ export const useForm = <T extends {}>({
   ) => (
     formItem: (params: AdaptedFormItemProps<T, K, M, A>) => React.ReactNode
   ) => {
-    const getErrorText = getErrorTextFn<T, K>({
-      name: key,
+    const getErrorText = getErrorTextFn<T, K, M>({
+      props: {
+        name: key,
+        value: values[key],
+        meta: meta as M,
+      },
       ...validationParams,
     });
     const errorText = getErrorText(values[key]);
@@ -104,19 +107,19 @@ export const useForm = <T extends {}>({
   };
 };
 
-const getErrorTextFn = <T extends {}, K extends keyof T>({
-  name,
+const getErrorTextFn = <T extends {}, K extends keyof T, M>({
+  props,
   required,
   validationMessages,
   custom,
   customAsync,
   ...typeParams
-}: NamedValidationParams<T, K>) => (value: T[K]) => {
+}: ValidationParamsWithProps<T, K, M>) => (value: T[K]) => {
   if (required && !value) {
-    return validationMessages?.required?.(name) ?? `field is required`;
+    return validationMessages?.required?.(props) ?? `field is required`;
   } else {
-    if (typeof value === "string") {
-      const result = validator(typeParams, value);
+    if (typeof value === "string" && typeParams.validation) {
+      const result = validator(typeParams.validation, value);
       if (result) return result;
     }
     if (custom) {

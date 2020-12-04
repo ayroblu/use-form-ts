@@ -53,7 +53,7 @@ export const useForm = <T extends {}>({
       },
       ...validationParams,
     });
-    const errorText = loading ? getErrorText(values[key]) : null;
+    const errorText = !loading[key] ? getErrorText(values[key]) : null;
     if (errorText instanceof Promise) {
       setLoading({ ...loading, [key]: true });
       errorText
@@ -64,7 +64,6 @@ export const useForm = <T extends {}>({
         .catch(
           (err) =>
             getIsMounted() &&
-            validationParams.customAsync &&
             err instanceof Error &&
             setErrors({
               ...errors,

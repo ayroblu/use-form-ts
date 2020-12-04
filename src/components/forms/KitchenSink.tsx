@@ -18,16 +18,12 @@ export const KitchenSink = () => {
           required: ({ meta: { label } }) => `Yo, ${label} is required`,
         },
         custom: (val) => (val === "3" ? "3 is not allowed!" : ""),
-        // customAsync: {
-        //   validator: (val) =>
-        //     wait().then(() => (val === "4" ? "4 is not allow async!" : "")),
-        //   handleLoading: (val) => `loading for ${val}`,
-        //   handleCatch: (err) => `err: ${err.message}`,
-        // },
+        customAsync: (val) =>
+          wait().then(() => (val === "4" ? "4 is not allow async!" : null)),
         validation: {
           type: "whitespace",
         },
-      })(({ meta: { label }, errorText, ...props }) => (
+      })(({ meta: { label }, errorText, isLoading, ...props }) => (
         <label>
           <span>{label}</span>
           <input {...props} />

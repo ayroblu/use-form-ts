@@ -10794,10 +10794,10 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-use-form-ts@^0.0.14:
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/use-form-ts/-/use-form-ts-0.0.14.tgz#bb42269c487bd2e1d02be43a3abcdeb381a06aa3"
-  integrity sha512-hCjfBAtFf6Quez1KWn5OECJGIIWIVzsMPI449OEM7d7uT/tyu4spdMyzH3slMqOdUV2yWcOxW80WIlIuSXVGMg==
+use-form-ts@^0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/use-form-ts/-/use-form-ts-0.0.15.tgz#3a5f1ce80a9789a75e2f7ede4e1d112b37dbf428"
+  integrity sha512-r9HukkKq29TYRHABbG5SHsZljIsjF+k4WPinnoJnHiOhE76Nk7gWciUSvDEWcKNmM00hA6q+KNxcBPA1MnoHrg==
 
 use@^3.1.0:
   version "3.1.1"

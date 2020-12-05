@@ -28,6 +28,7 @@ export const KitchenSink = () => {
         <label>
           <span>{label}</span>
           <input {...props} />
+          {isLoading ? <span>... loading</span> : null}
           <span>{errorText}</span>
         </label>
       ))}

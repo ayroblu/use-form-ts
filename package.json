@@ -1,13 +1,13 @@
 {
   "name": "use-form-ts",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Hooks for forms with TypeScript",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "repository": "github.com/ayroblu/use-form-ts",
   "author": "Ben Lu",
   "license": "ISC",
   "files": [
-    "dist"
+    "dist/src"
   ],
   "scripts": {
     "prepublishOnly": "ts-node scripts/publish.ts",

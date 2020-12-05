@@ -1,6 +1,7 @@
 import React from "react";
-import styles from "./ExampleForm.module.css";
 import { useForm } from "use-form-ts";
+
+import styles from "./ExampleForm.module.css";
 
 export const ExampleForm = () => {
   const [state, setState] = React.useState({
@@ -14,12 +15,11 @@ export const ExampleForm = () => {
   });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (form.validate()) {
+    if (form.validate())
       setState({
         ...state,
         log: state.log.concat(`Result: ${JSON.stringify(state.form)}`),
       });
-    }
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -64,12 +64,10 @@ const InputField: React.FC<InputFieldProps> = ({
   label,
   errorText,
   ...inputProps
-}) => {
-  return (
-    <label className={styles.input}>
-      <span className={styles.inputLabel}>{label}</span>
-      <input id={name} {...inputProps} />
-      <div className={styles.error}>{errorText}</div>
-    </label>
-  );
-};
+}) => (
+  <label className={styles.input}>
+    <span className={styles.inputLabel}>{label}</span>
+    <input id={name} {...inputProps} />
+    <div className={styles.error}>{errorText}</div>
+  </label>
+);

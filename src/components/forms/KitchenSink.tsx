@@ -19,7 +19,9 @@ export const KitchenSink = () => {
         },
         custom: (val) => (val === "3" ? "3 is not allowed!" : ""),
         customAsync: (val) =>
-          wait(1000).then(() => (val === "4" ? "4 is not allow async!" : null)),
+          wait(1000).then(() =>
+            val === "4" ? "Promise 4 is not allowed!" : null
+          ),
         validation: {
           type: "whitespace",
         },

@@ -111,8 +111,11 @@ export const useForm = <T extends {}>({
       return a;
     }, {});
     setTouched(allTouched);
-    return !Object.values(errors).filter((value) => typeof value === "string")
-      .length;
+    const numErrors = Object.values(errors).filter(
+      (value) => typeof value === "string"
+    ).length;
+    const numLoading = Object.values(loading).filter((value) => value).length;
+    return !numErrors && !numLoading;
   };
   return {
     createFormItem,

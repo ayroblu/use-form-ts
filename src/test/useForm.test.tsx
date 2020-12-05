@@ -5,13 +5,21 @@ import React from "react";
 import { KitchenSink, testIds } from "./KitchenSink";
 
 describe("useForm", () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
   it("should render without errors", () => {
     render(<KitchenSink />);
 
     expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
   });
 
-  it("no errors for entering in '1'", () => {
+  it("no errors for entering in '1'", async () => {
     render(<KitchenSink />);
     const domNode = screen.getByLabelText("Field") as HTMLInputElement;
     userEvent.type(domNode, "1");
@@ -19,7 +27,13 @@ describe("useForm", () => {
 
     expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
 
+    // Check wait for loading
     expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+    userEvent.click(screen.getByText("Submit"));
+    expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+
+    await act(async () => jest.runAllTimers());
+
     userEvent.click(screen.getByText("Submit"));
     expect(screen.getByText(/Valid!/)).toBeTruthy();
   });
@@ -36,6 +50,11 @@ describe("useForm", () => {
       "Yo, Field is required"
     );
     expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+    userEvent.click(screen.getByText("Submit"));
+    expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+
+    await act(async () => jest.runAllTimers());
+
     userEvent.click(screen.getByText("Submit"));
     expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
   });
@@ -55,14 +74,6 @@ describe("useForm", () => {
   });
 
   describe("async", () => {
-    beforeEach(() => {
-      jest.useFakeTimers();
-    });
-    afterEach(() => {
-      jest.runOnlyPendingTimers();
-      jest.useRealTimers();
-    });
-
     it("should show an async custom error when entering '4'", async () => {
       render(<KitchenSink />);
       const domNode = screen.getByLabelText("Field") as HTMLInputElement;
@@ -88,6 +99,31 @@ describe("useForm", () => {
       expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
       userEvent.click(screen.getByText("Submit"));
       expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+    });
+
+    it("should not show errors when entering '45' before the timeout", async () => {
+      render(<KitchenSink />);
+      const domNode = screen.getByLabelText("Field") as HTMLInputElement;
+      userEvent.type(domNode, "45");
+      expect(domNode.value).toEqual("45");
+
+      expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
+      expect(screen.getByTestId(testIds.loading)).toHaveTextContent(
+        "...loading"
+      );
+
+      expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+      userEvent.click(screen.getByText("Submit"));
+      expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+
+      await act(async () => jest.runAllTimers());
+
+      expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
+      expect(screen.queryByTestId(testIds.loading)).not.toBeTruthy();
+
+      expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+      userEvent.click(screen.getByText("Submit"));
+      expect(screen.getByText(/Valid!/)).toBeTruthy();
     });
   });
 });

@@ -1,4 +1,5 @@
 {
+  "extends": "react-app",
   "plugins": ["@typescript-eslint", "import", "sort-destructure-keys"],
   "env": {
     "browser": true,

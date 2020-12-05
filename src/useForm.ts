@@ -38,7 +38,7 @@ export const useForm = <T extends {}>({
   const [loading, setLoading] = React.useState<
     Partial<Record<keyof T, boolean>>
   >({});
-  const lastSeen: Partial<Record<keyof T, T[keyof T]>> = {};
+  const [lastSeen, setLastSeen] = React.useState<{ [K in keyof T]?: T[K] }>({});
 
   const createFormItem = <K extends keyof T, M, A = undefined>(
     key: K,
@@ -55,10 +55,11 @@ export const useForm = <T extends {}>({
       ...validationParams,
     });
     if (lastSeen[key] !== values[key]) {
-      lastSeen[key] = values[key];
+      setLastSeen({ ...lastSeen, [key]: values[key] });
       const errorText = !loading[key] ? getErrorText(values[key]) : null;
       if (errorText instanceof Promise) {
         setLoading({ ...loading, [key]: true });
+        setErrors({ ...errors, [key]: null });
         errorText
           .then(
             (errorText) =>

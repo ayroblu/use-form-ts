@@ -19,7 +19,7 @@ export const KitchenSink = () => {
         },
         custom: (val) => (val === "3" ? "3 is not allowed!" : ""),
         customAsync: (val) =>
-          wait().then(() => (val === "4" ? "4 is not allow async!" : null)),
+          wait(1000).then(() => (val === "4" ? "4 is not allow async!" : null)),
         validation: {
           type: "whitespace",
         },
@@ -34,4 +34,4 @@ export const KitchenSink = () => {
   );
 };
 const inputAdaptor = (e: React.ChangeEvent<HTMLInputElement>) => e.target.value;
-const wait = () => new Promise((y) => setTimeout(y));
+const wait = (time: number) => new Promise((y) => setTimeout(y, time));

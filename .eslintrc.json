@@ -20,6 +20,7 @@
     "eqeqeq": "error",
     "prefer-const": "error",
     "prefer-destructuring": "error",
+    "react/jsx-key": "error",
     "import/no-unresolved": "off",
     "import/order": [
       "error",

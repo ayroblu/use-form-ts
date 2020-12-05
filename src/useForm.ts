@@ -38,6 +38,7 @@ export const useForm = <T extends {}>({
   const [loading, setLoading] = React.useState<
     Partial<Record<keyof T, boolean>>
   >({});
+  const lastSeen: Partial<Record<keyof T, T[keyof T]>> = {};
 
   const createFormItem = <K extends keyof T, M, A = undefined>(
     key: K,
@@ -53,28 +54,31 @@ export const useForm = <T extends {}>({
       },
       ...validationParams,
     });
-    const errorText = !loading[key] ? getErrorText(values[key]) : null;
-    if (errorText instanceof Promise) {
-      setLoading({ ...loading, [key]: true });
-      errorText
-        .then(
-          (errorText) =>
-            getIsMounted() && setErrors({ ...errors, [key]: errorText })
-        )
-        .catch(
-          (err) =>
-            getIsMounted() &&
-            err instanceof Error &&
-            setErrors({
-              ...errors,
-              [key]: err.message,
-            })
-        )
-        .then(() => {
-          setLoading({ ...loading, [key]: false });
-        });
-    } else if (errorText !== errors[key]) {
-      setErrors({ ...errors, [key]: errorText });
+    if (lastSeen[key] !== values[key]) {
+      lastSeen[key] = values[key];
+      const errorText = !loading[key] ? getErrorText(values[key]) : null;
+      if (errorText instanceof Promise) {
+        setLoading({ ...loading, [key]: true });
+        errorText
+          .then(
+            (errorText) =>
+              getIsMounted() && setErrors({ ...errors, [key]: errorText })
+          )
+          .catch(
+            (err) =>
+              getIsMounted() &&
+              err instanceof Error &&
+              setErrors({
+                ...errors,
+                [key]: err.message,
+              })
+          )
+          .then(() => {
+            setLoading({ ...loading, [key]: false });
+          });
+      } else if (errorText !== errors[key]) {
+        setErrors({ ...errors, [key]: errorText });
+      }
     }
 
     const onChangeHandler = (val: A extends undefined ? T[K] : A) => {

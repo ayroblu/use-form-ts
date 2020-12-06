@@ -3,17 +3,11 @@ import React from "react";
 import { useIsMounted } from "./hooks";
 import {
   ControlledParams,
+  CreateFormItem,
   FormItemProps,
-  FormItemPropsAdaptedAsync,
-  FormItemPropsAdaptedSync,
-  FormItemPropsAsync,
-  FormItemPropsSync,
   FormItemSetupParams,
-  FormItemSetupParamsAdaptedAsync,
-  FormItemSetupParamsAdaptedSync,
-  FormItemSetupParamsNoAdaptorAsync,
-  FormItemSetupParamsNoAdaptorSync,
   LocalParams,
+  ValidationParams,
   ValidationParamsWithProps,
 } from "./useFormTypes";
 import { ObjectKeys } from "./utils";
@@ -49,84 +43,28 @@ export const useForm = <T extends {}>({
   const [lastSeen, setLastSeen] = React.useState<{ [K in keyof T]?: T[K] }>({});
   const lastSeenRef = React.useRef<{ [K in keyof T]?: T[K] }>({});
 
-  type CreateFormItem = {
-    <K extends keyof T, M, A>(
-      key: K,
-      params: FormItemSetupParamsAdaptedAsync<T, K, M, A>
-    ): (
-      formItem: (
-        params: FormItemPropsAdaptedAsync<T, K, M, A>
-      ) => React.ReactNode
-    ) => React.ReactNode;
-    <K extends keyof T, M>(
-      key: K,
-      params: FormItemSetupParamsNoAdaptorAsync<T, K, M>
-    ): (
-      formItem: (params: FormItemPropsAsync<T, K, M>) => React.ReactNode
-    ) => React.ReactNode;
-    <K extends keyof T, M, A>(
-      key: K,
-      params: FormItemSetupParamsAdaptedSync<T, K, M, A>
-    ): (
-      formItem: (
-        params: FormItemPropsAdaptedSync<T, K, M, A>
-      ) => React.ReactNode
-    ) => React.ReactNode;
-    <K extends keyof T, M>(
-      key: K,
-      params: FormItemSetupParamsNoAdaptorSync<T, K, M>
-    ): (
-      formItem: (params: FormItemPropsSync<T, K, M>) => React.ReactNode
-    ) => React.ReactNode;
-  };
-  const createFormItem: CreateFormItem = <K extends keyof T, M, A = undefined>(
+  const createFormItem: CreateFormItem<T> = <
+    K extends keyof T,
+    M,
+    A = undefined
+  >(
     key: K,
     { adaptor, meta, ...validationParams }: FormItemSetupParams<T, K, M, A> = {}
   ) => (formItem: (params: any) => React.ReactNode) => {
-    // const createFormItem = <K extends keyof T, M, A = undefined>(
-    //   key: K,
-    //   { adaptor, meta, ...validationParams }: FormItemSetupParams<T, K, M, A> = {}
-    // ) => (
-    //   formItem: (params: AdaptedFormItemProps<T, K, M, A>) => React.ReactNode
-    // ) => {
-    const getErrorText = getErrorTextFn<T, K, M>({
-      props: {
-        name: key,
-        value: values[key],
-        meta: meta as M,
-      },
-      ...validationParams,
+    handleErrorText<T, K, M>({
+      key,
+      values,
+      meta: meta as M,
+      validationParams,
+      lastSeen,
+      setLastSeen,
+      lastSeenRef,
+      loading,
+      setLoading,
+      errors,
+      setErrors,
+      getIsMounted,
     });
-    if (lastSeen[key] !== values[key]) {
-      setLastSeen({ ...lastSeen, [key]: values[key] });
-      lastSeenRef.current = { ...lastSeenRef.current, [key]: values[key] };
-      const errorText = getErrorText(values[key]);
-      if (errorText instanceof Promise) {
-        setLoading({ ...loading, [key]: true });
-        setErrors({ ...errors, [key]: null });
-        errorText
-          .then(
-            (errorText) =>
-              getIsMounted() &&
-              values[key] === lastSeenRef.current[key] &&
-              setErrors({ ...errors, [key]: errorText })
-          )
-          .catch(
-            (err) =>
-              getIsMounted() &&
-              err instanceof Error &&
-              setErrors({
-                ...errors,
-                [key]: err.message,
-              })
-          )
-          .then(() => {
-            setLoading({ ...loading, [key]: false });
-          });
-      } else if (errorText !== errors[key]) {
-        setErrors({ ...errors, [key]: errorText });
-      }
-    }
 
     const onChangeValue = (value: T[K]) => {
       // https://stackoverflow.com/questions/60456679/assignment-of-generic-object-to-partial-type
@@ -193,6 +131,73 @@ const getErrorTextFn = <T extends {}, K extends keyof T, M>({
     if (customAsync) return customAsync(value);
   }
   return null;
+};
+type HandleErrorTextInput<T extends {}, K extends keyof T, M> = {
+  key: K;
+  values: T;
+  meta: M;
+  validationParams: ValidationParams<T, K, M>;
+  getIsMounted: () => boolean;
+  errors: { [key in keyof T]?: string | null };
+  setErrors: (v: { [key in keyof T]?: string | null }) => void;
+  loading: Partial<Record<keyof T, boolean>>;
+  setLoading: (v: Partial<Record<keyof T, boolean>>) => void;
+  lastSeen: { [K in keyof T]?: T[K] };
+  setLastSeen: (v: { [K in keyof T]?: T[K] }) => void;
+  lastSeenRef: React.MutableRefObject<{ [K in keyof T]?: T[K] }>;
+};
+const handleErrorText = <T extends {}, K extends keyof T, M>({
+  key,
+  values,
+  meta,
+  validationParams,
+  lastSeen,
+  setLastSeen,
+  lastSeenRef,
+  loading,
+  setLoading,
+  errors,
+  setErrors,
+  getIsMounted,
+}: HandleErrorTextInput<T, K, M>) => {
+  const getErrorText = getErrorTextFn<T, K, M>({
+    props: {
+      name: key,
+      value: values[key],
+      meta: meta as M,
+    },
+    ...validationParams,
+  });
+  if (lastSeen[key] !== values[key]) {
+    setLastSeen({ ...lastSeen, [key]: values[key] });
+    lastSeenRef.current = { ...lastSeenRef.current, [key]: values[key] };
+    const errorText = getErrorText(values[key]);
+    if (errorText instanceof Promise) {
+      setLoading({ ...loading, [key]: true });
+      setErrors({ ...errors, [key]: null });
+      errorText
+        .then(
+          (errorText) =>
+            getIsMounted() &&
+            values[key] === lastSeenRef.current[key] &&
+            setErrors({ ...errors, [key]: errorText })
+        )
+        .catch(
+          (err) =>
+            getIsMounted() &&
+            err instanceof Error &&
+            setErrors({
+              ...errors,
+              [key]: err.message,
+            })
+        )
+        .then(() => {
+          setLoading({ ...loading, [key]: false });
+        });
+    } else if (errorText !== errors[key]) {
+      setErrors({ ...errors, [key]: errorText });
+    }
+  }
 };
 
 export const useLocalForm = <T>({ initialData }: LocalParams<T>) => {

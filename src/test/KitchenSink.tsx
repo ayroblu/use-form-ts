@@ -13,19 +13,19 @@ export const KitchenSink = () => {
     e.preventDefault();
     if (form.validate()) setLog(log.concat(`Valid! ${JSON.stringify(state)}`));
   };
+  // {form.createFormItem("sfield", {
+  //   adaptor: inputAdaptor,
+  //   meta: { label: "Field" },
+  //   required: true,
+  // })(({ meta: { label }, errorText, ...props }) => (
+  //   <label>
+  //     <span>{label}</span>
+  //     <input {...props} />
+  //     <span data-testid={testIds.errorText}>{errorText}</span>
+  //   </label>
+  // ))}
   return (
     <form onSubmit={handleSubmit}>
-      {form.createFormItem("sfield", {
-        adaptor: inputAdaptor,
-        meta: { label: "Field" },
-        required: true,
-      })(({ meta: { label }, errorText, ...props }) => (
-        <label>
-          <span>{label}</span>
-          <input {...props} />
-          <span data-testid={testIds.errorText}>{errorText}</span>
-        </label>
-      ))}
       {form.createFormItem("field", {
         adaptor: inputAdaptor,
         meta: { label: "Field" },

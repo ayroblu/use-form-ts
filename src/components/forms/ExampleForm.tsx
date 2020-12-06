@@ -30,7 +30,7 @@ export const ExampleForm = () => {
         meta: {
           label: "First Name",
         },
-      })(({ errorText, meta: { label }, isLoading, ...props }) => (
+      })(({ errorText, meta: { label }, ...props }) => (
         <InputField label={label} {...props} errorText={errorText || ""} />
       ))}
       {form.createFormItem("lastname", {
@@ -39,7 +39,7 @@ export const ExampleForm = () => {
         meta: {
           label: "Last Name",
         },
-      })(({ errorText, meta: { label }, isLoading, ...props }) => (
+      })(({ errorText, meta: { label }, ...props }) => (
         <InputField label={label} {...props} errorText={errorText || ""} />
       ))}
       <input className={styles.submit} type="submit" value="Submit" />

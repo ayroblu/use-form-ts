@@ -2,9 +2,17 @@ import React from "react";
 
 import { useIsMounted } from "./hooks";
 import {
-  AdaptedFormItemProps,
   ControlledParams,
+  FormItemProps,
+  FormItemPropsAdaptedAsync,
+  FormItemPropsAdaptedSync,
+  FormItemPropsAsync,
+  FormItemPropsSync,
   FormItemSetupParams,
+  FormItemSetupParamsAdaptedAsync,
+  FormItemSetupParamsAdaptedSync,
+  FormItemSetupParamsNoAdaptorAsync,
+  FormItemSetupParamsNoAdaptorSync,
   LocalParams,
   ValidationParamsWithProps,
 } from "./useFormTypes";
@@ -41,12 +49,46 @@ export const useForm = <T extends {}>({
   const [lastSeen, setLastSeen] = React.useState<{ [K in keyof T]?: T[K] }>({});
   const lastSeenRef = React.useRef<{ [K in keyof T]?: T[K] }>({});
 
-  const createFormItem = <K extends keyof T, M, A = undefined>(
+  type CreateFormItem = {
+    <K extends keyof T, M, A>(
+      key: K,
+      params: FormItemSetupParamsAdaptedAsync<T, K, M, A>
+    ): (
+      formItem: (
+        params: FormItemPropsAdaptedAsync<T, K, M, A>
+      ) => React.ReactNode
+    ) => React.ReactNode;
+    <K extends keyof T, M>(
+      key: K,
+      params: FormItemSetupParamsNoAdaptorAsync<T, K, M>
+    ): (
+      formItem: (params: FormItemPropsAsync<T, K, M>) => React.ReactNode
+    ) => React.ReactNode;
+    <K extends keyof T, M, A>(
+      key: K,
+      params: FormItemSetupParamsAdaptedSync<T, K, M, A>
+    ): (
+      formItem: (
+        params: FormItemPropsAdaptedSync<T, K, M, A>
+      ) => React.ReactNode
+    ) => React.ReactNode;
+    <K extends keyof T, M>(
+      key: K,
+      params: FormItemSetupParamsNoAdaptorSync<T, K, M>
+    ): (
+      formItem: (params: FormItemPropsSync<T, K, M>) => React.ReactNode
+    ) => React.ReactNode;
+  };
+  const createFormItem: CreateFormItem = <K extends keyof T, M, A = undefined>(
     key: K,
     { adaptor, meta, ...validationParams }: FormItemSetupParams<T, K, M, A> = {}
-  ) => (
-    formItem: (params: AdaptedFormItemProps<T, K, M, A>) => React.ReactNode
-  ) => {
+  ) => (formItem: (params: any) => React.ReactNode) => {
+    // const createFormItem = <K extends keyof T, M, A = undefined>(
+    //   key: K,
+    //   { adaptor, meta, ...validationParams }: FormItemSetupParams<T, K, M, A> = {}
+    // ) => (
+    //   formItem: (params: AdaptedFormItemProps<T, K, M, A>) => React.ReactNode
+    // ) => {
     const getErrorText = getErrorTextFn<T, K, M>({
       props: {
         name: key,
@@ -86,22 +128,28 @@ export const useForm = <T extends {}>({
       }
     }
 
-    const onChangeHandler = (val: A extends undefined ? T[K] : A) => {
-      const value = adaptor ? adaptor(val as A) : val;
+    const onChangeValue = (value: T[K]) => {
       // https://stackoverflow.com/questions/60456679/assignment-of-generic-object-to-partial-type
       onChange({ [key]: value } as Pick<T, K> & Partial<T>);
       setTouched({ ...touched, [key]: true });
     };
-    // This function is not very typesafe, but necessary due to the adapter generic!
-    return formItem({
+    const onChangeHandler = adaptor
+      ? (v: A) => onChangeValue(adaptor(v))
+      : onChange;
+    const formItemProps: FormItemProps<T, K, M, A> = {
       name: key,
       value: values[key],
       onChange: onChangeHandler,
       onBlur: onChangeHandler,
-      errorText: (touched[key] && errors[key]) || null,
-      meta,
-      isLoading: !!loading[key],
-    } as AdaptedFormItemProps<T, K, M, A>);
+      errorText: (touched[key] && errors[key]) ?? null,
+      meta: meta as NonNullable<typeof meta>, // Slightly wrong, but not terrible :/
+      ...(validationParams.customAsync
+        ? {
+            isLoading: !!loading[key],
+          }
+        : {}),
+    };
+    return formItem(formItemProps);
   };
   const validate = () => {
     const allTouched = ObjectKeys(values).reduce<

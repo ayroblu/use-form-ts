@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "../useForm";
 
 export const KitchenSink = () => {
-  const [state, setState] = React.useState({ field: "" });
+  const [state, setState] = React.useState({ sfield: "", field: "" });
   const [log, setLog] = React.useState<string[]>([]);
   const form = useForm({
     values: state,
@@ -15,6 +15,17 @@ export const KitchenSink = () => {
   };
   return (
     <form onSubmit={handleSubmit}>
+      {form.createFormItem("sfield", {
+        adaptor: inputAdaptor,
+        meta: { label: "Field" },
+        required: true,
+      })(({ meta: { label }, errorText, ...props }) => (
+        <label>
+          <span>{label}</span>
+          <input {...props} />
+          <span data-testid={testIds.errorText}>{errorText}</span>
+        </label>
+      ))}
       {form.createFormItem("field", {
         adaptor: inputAdaptor,
         meta: { label: "Field" },

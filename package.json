@@ -1,6 +1,6 @@
 {
   "name": "use-form-ts",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Hooks for forms with TypeScript",
   "main": "dist/src/index.js",
   "repository": "github.com/ayroblu/use-form-ts",

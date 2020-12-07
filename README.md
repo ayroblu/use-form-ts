@@ -2,6 +2,12 @@
 
 This is a lightweight form style for someone who would normally do it all themselves but with some helping types.
 
+## Installation
+
+```sh
+yarn add use-form-hook
+```
+
 ## Getting Started
 
 Use the hook to get started, we'll use `useState` for the state management in this example

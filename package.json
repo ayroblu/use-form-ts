@@ -1,9 +1,19 @@
 {
   "name": "use-form-ts",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Hooks for forms with TypeScript",
   "main": "dist/src/index.js",
-  "repository": "github.com/ayroblu/use-form-ts",
+  "repository": "https://github.com/ayroblu/use-form-ts",
+  "keywords": [
+    "forms",
+    "typescript",
+    "react",
+    "hooks"
+  ],
+  "bugs": {
+    "url": "https://github.com/ayroblu/use-form-ts/issues"
+  },
+  "homepage": "https://ayroblu.github.io/use-form-ts",
   "author": "Ben Lu",
   "license": "ISC",
   "files": [

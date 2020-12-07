@@ -1,16 +1,6 @@
 .form {
   padding: var(--spacing-5) 0;
 }
-.input {
-  padding: var(--spacing-5) var(--spacing-10);
-  display: block;
-}
-.inputLabel {
-  margin-right: var(--spacing-5);
-}
-.error {
-  color: red;
-}
 .submit {
   margin: var(--spacing-5) var(--spacing-10);
 }

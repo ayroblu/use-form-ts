@@ -1,30 +1,28 @@
-export const exampleForm = `
-import React from "react";
+export const exampleForm = `import React from "react";
 import { useForm } from "use-form-ts";
 
 import styles from "./ExampleForm.module.css";
+import { InputField } from "./InputField";
 
 export const ExampleForm = () => {
-  const [state, setState] = React.useState({
-    form: { firstname: "", lastname: "" },
-    log: [] as string[],
+  const [formState, setFormState] = React.useState({
+    firstname: "",
+    middlename: "",
+    lastname: "",
   });
+  const [log, setLog] = React.useState<string[]>([]);
+
   const form = useForm({
-    values: state.form,
-    onChange: (value) =>
-      setState({ ...state, form: { ...state.form, ...value } }),
+    values: formState,
+    onChange: (value) => setFormState({ ...formState, ...value }),
   });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (form.validate())
-      setState({
-        ...state,
-        log: state.log.concat(\`Result: \${JSON.stringify(state.form)}\`),
-      });
+    if (form.validate()) setLog(log.concat(`Result: ${JSON.stringify(form)}`));
   };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>Example Form</h3>
+    <form onSubmit={handleSubmit} className={styles.form}>
       {form.createFormItem("firstname", {
         required: true,
         adaptor: (e: React.ChangeEvent<HTMLInputElement>) => e.target.value,
@@ -45,31 +43,11 @@ export const ExampleForm = () => {
       ))}
       <input className={styles.submit} type="submit" value="Submit" />
       <section>
-        {state.log.map((v, i) => (
+        {log.map((v, i) => (
           <p key={i}>{v}</p>
         ))}
       </section>
     </form>
   );
 };
-
-type InputFieldProps = {
-  name: string;
-  label: string;
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-  errorText: string;
-};
-const InputField: React.FC<InputFieldProps> = ({
-  name,
-  label,
-  errorText,
-  ...inputProps
-}) => (
-  <label className={styles.input}>
-    <span className={styles.inputLabel}>{label}</span>
-    <input id={name} {...inputProps} />
-    <div className={styles.error}>{errorText}</div>
-  </label>
-);
-`.trim();
+`

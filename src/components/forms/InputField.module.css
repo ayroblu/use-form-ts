@@ -1,0 +1,10 @@
+.input {
+  padding: var(--spacing-5) var(--spacing-10);
+  display: block;
+}
+.inputLabel {
+  margin-right: var(--spacing-5);
+}
+.error {
+  color: red;
+}

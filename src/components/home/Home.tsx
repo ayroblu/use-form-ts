@@ -2,6 +2,8 @@ import React from "react";
 
 import styles from "./Home.module.css";
 
+import { DeclarativeForm } from "../forms/DeclarativeForm";
+import { declarativeForm } from "../forms/DeclarativeForm.txt";
 import { ExampleForm } from "../forms/ExampleForm";
 import { exampleForm } from "../forms/ExampleForm.txt";
 import { ExampleFrame } from "../shared/ExampleFrame";
@@ -46,8 +48,16 @@ export const Home: React.FC = () => (
       </ul>
     </section>
     <section>
+      <p>This example showcases a complete common use of useForm</p>
       <ExampleFrame sourceCode={exampleForm} headerText="Example">
         <ExampleForm />
+      </ExampleFrame>
+      <p>
+        This example showcases a similar example but by predeclaring your form
+        and using a generator
+      </p>
+      <ExampleFrame sourceCode={declarativeForm} headerText="Declarative Form">
+        <DeclarativeForm />
       </ExampleFrame>
     </section>
   </section>

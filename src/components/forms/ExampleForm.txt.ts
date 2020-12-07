@@ -1,3 +1,4 @@
+export const exampleForm = `
 import React from "react";
 import { useForm } from "use-form-ts";
 
@@ -18,11 +19,12 @@ export const ExampleForm = () => {
     if (form.validate())
       setState({
         ...state,
-        log: state.log.concat(`Result: ${JSON.stringify(state.form)}`),
+        log: state.log.concat(\`Result: \${JSON.stringify(state.form)}\`),
       });
   };
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit}>
+      <h3>Example Form</h3>
       {form.createFormItem("firstname", {
         required: true,
         adaptor: (e: React.ChangeEvent<HTMLInputElement>) => e.target.value,
@@ -70,3 +72,4 @@ const InputField: React.FC<InputFieldProps> = ({
     <div className={styles.error}>{errorText}</div>
   </label>
 );
+`.trim();

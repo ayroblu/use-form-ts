@@ -1,6 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 # For the other branch
 /dist
+# Eslint makes a cache?
+/.eslintcache
 
 # dependencies
 /node_modules

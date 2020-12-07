@@ -8,9 +8,30 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 1.3rem;
+}
+html {
+  background-color: var(--color-grey-100);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+h4,
+pre {
+  margin: 0;
+}
+
+:root {
+  --color-grey-100: #fafafa;
+  --color-grey-300: #ddd;
+  --color-grey-500: #999;
+  --color-green-700: #3f3;
+  --spacing-5: 5px;
+  --spacing-10: 10px;
+  --spacing-20: 20px;
+  --border-radius-10: 10px;
+  --color-primary: #39f;
+  --color-primary-text: white;
 }

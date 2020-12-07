@@ -1,0 +1,22 @@
+.exampleFrame {
+  display: block;
+  border: 1px solid var(--color-grey-500);
+  border-radius: var(--border-radius-10);
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-10);
+  border-bottom: 1px solid var(--color-grey-500);
+}
+.hidden {
+  height: 0;
+  overflow: hidden;
+}
+.show {
+  display: block;
+}
+.code {
+  font-size: 1rem;
+}

@@ -9,6 +9,10 @@ const files = [
     filePath: "src/components/forms/DeclarativeForm.tsx",
     variable: "declarativeForm",
   },
+  {
+    filePath: "src/components/forms/MaterialForm.tsx",
+    variable: "materialForm",
+  },
 ];
 
 files.forEach(({ filePath, variable }) => {

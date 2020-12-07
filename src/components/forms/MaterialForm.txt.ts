@@ -1,10 +1,8 @@
+export const materialForm = `import { TextField, Button } from "@material-ui/core";
 import React from "react";
 import { useForm } from "use-form-ts";
 
-import styles from "./ExampleForm.module.css";
-import { InputField } from "./InputField";
-
-export const ExampleForm = () => {
+export const MaterialForm = () => {
   const [formState, setFormState] = React.useState({
     firstname: "",
     lastname: "",
@@ -18,30 +16,40 @@ export const ExampleForm = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (form.validate())
-      setLog(log.concat(`Result: ${JSON.stringify(formState)}`));
+      setLog(log.concat(\`Result: \${JSON.stringify(formState)}\`));
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit}>
       {form.createFormItem("firstname", {
         required: true,
-        adaptor: (e: React.ChangeEvent<HTMLInputElement>) => e.target.value,
+        adaptor: (e: React.FocusEvent<HTMLInputElement>) => e.target.value,
         meta: {
           label: "First Name",
         },
       })(({ errorText, meta: { label }, ...props }) => (
-        <InputField label={label} {...props} errorText={errorText || ""} />
+        <TextField
+          label={label}
+          variant="outlined"
+          {...props}
+          {...(errorText ? { error: true, helperText: errorText } : {})}
+        />
       ))}
       {form.createFormItem("lastname", {
         required: true,
-        adaptor: (e: React.ChangeEvent<HTMLInputElement>) => e.target.value,
+        adaptor: (e: React.FocusEvent<HTMLInputElement>) => e.target.value,
         meta: {
           label: "Last Name",
         },
       })(({ errorText, meta: { label }, ...props }) => (
-        <InputField label={label} {...props} errorText={errorText || ""} />
+        <TextField
+          label={label}
+          variant="outlined"
+          {...props}
+          {...(errorText ? { error: true, helperText: errorText } : {})}
+        />
       ))}
-      <input className={styles.submit} type="submit" value="Submit" />
+      <Button type="submit">Submit</Button>
       <section>
         {log.map((v, i) => (
           <p key={i}>{v}</p>
@@ -50,3 +58,4 @@ export const ExampleForm = () => {
     </form>
   );
 };
+`

@@ -6,6 +6,8 @@ import { DeclarativeForm } from "../forms/DeclarativeForm";
 import { declarativeForm } from "../forms/DeclarativeForm.txt";
 import { ExampleForm } from "../forms/ExampleForm";
 import { exampleForm } from "../forms/ExampleForm.txt";
+import { MaterialForm } from "../forms/MaterialForm";
+import { materialForm } from "../forms/MaterialForm.txt";
 import { ExampleFrame } from "../shared/ExampleFrame";
 
 export const Home: React.FC = () => (
@@ -59,6 +61,14 @@ export const Home: React.FC = () => (
       <ExampleFrame sourceCode={declarativeForm} headerText="Declarative Form">
         <DeclarativeForm />
       </ExampleFrame>
+      <p>
+        This example showcases using Material UI as your component library
+        instead of JS
+      </p>
+      <ExampleFrame sourceCode={materialForm} headerText="Material UI Form">
+        <MaterialForm />
+      </ExampleFrame>
     </section>
+    <footer className={styles.footer}>Made with love ❤️</footer>
   </section>
 );

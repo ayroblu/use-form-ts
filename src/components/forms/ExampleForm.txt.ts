@@ -7,7 +7,6 @@ import { InputField } from "./InputField";
 export const ExampleForm = () => {
   const [formState, setFormState] = React.useState({
     firstname: "",
-    middlename: "",
     lastname: "",
   });
   const [log, setLog] = React.useState<string[]>([]);

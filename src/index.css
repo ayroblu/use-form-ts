@@ -27,6 +27,7 @@ pre {
   --color-grey-100: #fafafa;
   --color-grey-300: #ddd;
   --color-grey-500: #999;
+  --color-grey-700: #333;
   --color-green-700: #3f3;
   --spacing-5: 5px;
   --spacing-10: 10px;
@@ -34,4 +35,21 @@ pre {
   --border-radius-10: 10px;
   --color-primary: #39f;
   --color-primary-text: white;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-grey-100: #222;
+    --color-grey-300: #333;
+    --color-grey-500: #999;
+    --color-grey-700: #fafafa;
+  }
+  body {
+    color: white;
+  }
+  a {
+    color: #39f;
+  }
+  a:visited {
+    color: #93f;
+  }
 }

@@ -13,11 +13,16 @@
   color: var(--color-green-700);
 }
 .terminal {
-  background-color: #333;
+  background-color: var(--color-grey-700);
   color: white;
   font-weight: bold;
   padding: var(--spacing-10) var(--spacing-20);
   border-radius: var(--border-radius-10);
+}
+@media (prefers-color-scheme: dark) {
+  .terminal {
+    background-color: var(--color-grey-300);
+  }
 }
 .title {
   align-self: stretch;
@@ -26,4 +31,17 @@
   font-size: 3rem;
   font-weight: bold;
   padding: var(--spacing-10);
+}
+.footer {
+  margin-top: var(--spacing-20);
+  padding: var(--spacing-20);
+  text-align: center;
+  background-color: var(--color-grey-700);
+  align-self: stretch;
+  color: white;
+}
+@media (prefers-color-scheme: dark) {
+  .footer {
+    background-color: var(--color-grey-300);
+  }
 }

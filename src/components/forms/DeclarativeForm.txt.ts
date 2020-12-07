@@ -83,7 +83,8 @@ export const DeclarativeForm = () => {
   });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (form.validate()) setLog(log.concat(\`Result: \${JSON.stringify(form)}\`));
+    if (form.validate())
+      setLog(log.concat(\`Result: \${JSON.stringify(formState)}\`));
   };
   const formItemCreator = formItemCreatorFn(form);
 

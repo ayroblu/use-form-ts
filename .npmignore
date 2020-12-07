@@ -1,1 +1,5 @@
+# Test this with `npm pack && tar -xvzf *.tgz && rm -rf package *.tgz`
+/*
+!/dist/src/
 /dist/src/test
+/dist/scripts/

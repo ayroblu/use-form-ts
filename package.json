@@ -16,9 +16,6 @@
   "homepage": "https://ayroblu.github.io/use-form-ts",
   "author": "Ben Lu",
   "license": "ISC",
-  "files": [
-    "dist/src"
-  ],
   "scripts": {
     "prepublishOnly": "ts-node scripts/publish.ts",
     "build": "rm -rf dist && tsc",
@@ -56,3 +53,4 @@
   },
   "dependencies": {}
 }
+

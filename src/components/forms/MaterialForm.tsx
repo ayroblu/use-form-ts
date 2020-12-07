@@ -39,7 +39,7 @@ export const MaterialForm = () => {
       <form onSubmit={handleSubmit} className={styles.form}>
         {form.createFormItem("firstname", {
           required: true,
-          adaptor: (e: React.FocusEvent<HTMLInputElement>) => e.target.value,
+          adaptor,
           meta: {
             label: "First Name",
           },
@@ -55,7 +55,7 @@ export const MaterialForm = () => {
         ))}
         {form.createFormItem("lastname", {
           required: true,
-          adaptor: (e: React.FocusEvent<HTMLInputElement>) => e.target.value,
+          adaptor,
           meta: {
             label: "Last Name",
           },
@@ -83,3 +83,4 @@ export const MaterialForm = () => {
     </ThemeProvider>
   );
 };
+const adaptor = (e: React.FocusEvent<HTMLInputElement>) => e.target.value;

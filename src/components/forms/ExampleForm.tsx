@@ -25,19 +25,15 @@ export const ExampleForm = () => {
     <form onSubmit={handleSubmit} className={styles.form}>
       {form.createFormItem("firstname", {
         required: true,
-        adaptor: (e: React.ChangeEvent<HTMLInputElement>) => e.target.value,
-        meta: {
-          label: "First Name",
-        },
+        adaptor,
+        meta: { label: "First Name" },
       })(({ errorText, meta: { label }, ...props }) => (
         <InputField label={label} {...props} errorText={errorText || ""} />
       ))}
       {form.createFormItem("lastname", {
         required: true,
-        adaptor: (e: React.ChangeEvent<HTMLInputElement>) => e.target.value,
-        meta: {
-          label: "Last Name",
-        },
+        adaptor,
+        meta: { label: "Last Name" },
       })(({ errorText, meta: { label }, ...props }) => (
         <InputField label={label} {...props} errorText={errorText || ""} />
       ))}
@@ -50,3 +46,4 @@ export const ExampleForm = () => {
     </form>
   );
 };
+const adaptor = (e: React.ChangeEvent<HTMLInputElement>) => e.target.value;

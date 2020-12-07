@@ -18,7 +18,7 @@ export const ExampleForm = () => {
   });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (form.validate()) setLog(log.concat(`Result: ${JSON.stringify(form)}`));
+    if (form.validate()) setLog(log.concat(\`Result: \${JSON.stringify(form)}\`));
   };
 
   return (

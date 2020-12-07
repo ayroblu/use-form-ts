@@ -1,4 +1,4 @@
-export const exampleForm = `import React from "react";
+export const declarativeForm = `import React from "react";
 import { CreateFormItem, useForm } from "use-form-ts";
 
 import styles from "./ExampleForm.module.css";
@@ -83,7 +83,7 @@ export const DeclarativeForm = () => {
   });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (form.validate()) setLog(log.concat(`Result: ${JSON.stringify(form)}`));
+    if (form.validate()) setLog(log.concat(\`Result: \${JSON.stringify(form)}\`));
   };
   const formItemCreator = formItemCreatorFn(form);
 

@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "postinstall": "node scripts/createSourceCode.js",
+    "update-examples": "node scripts/createSourceCode.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "lint": "eslint src --ext .ts --ext .tsx",

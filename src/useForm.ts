@@ -73,7 +73,7 @@ export const useForm = <T extends {}>({
     };
     const onChangeHandler = adaptor
       ? (v: A) => onChangeValue(adaptor(v))
-      : onChange;
+      : ((onChangeValue as any) as (v: A) => void);
     const formItemProps: FormItemProps<T, K, M, A> = {
       name: key,
       value: values[key],

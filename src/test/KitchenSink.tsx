@@ -38,6 +38,19 @@ export const KitchenSink = () => {
           <span data-testid={testIds.errorText}>{errorText}</span>
         </label>
       ))}
+      {form.createFormItem("sfield", {
+        meta: { label: "Simple Field" },
+      })(({ meta: { label }, errorText, name, value, onChange }) => (
+        <label>
+          <span>{label}</span>
+          <input
+            name={name}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+          />
+          <span data-testid={testIds.simpleErrorText}>{errorText}</span>
+        </label>
+      ))}
       <input type="submit" value="Submit" />
       {log.map((l, i) => (
         <div key={i}>{l}</div>
@@ -50,5 +63,6 @@ const wait = () => new Promise((y) => setTimeout(y));
 
 export const testIds = {
   errorText: "errorText",
+  simpleErrorText: "simpleErrorText",
   loading: "loading",
 };

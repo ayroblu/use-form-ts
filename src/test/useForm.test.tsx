@@ -19,111 +19,124 @@ describe("useForm", () => {
     expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
   });
 
-  it("no errors for entering in '1'", async () => {
-    render(<KitchenSink />);
-    const domNode = screen.getByLabelText("Field") as HTMLInputElement;
-    userEvent.type(domNode, "1");
-    expect(domNode.value).toEqual("1");
-
-    expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
-
-    // Check wait for loading
-    expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
-    userEvent.click(screen.getByText("Submit"));
-    expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
-
-    await act(async () => jest.runAllTimers());
-
-    userEvent.click(screen.getByText("Submit"));
-    expect(screen.getByText(/Valid!/)).toBeTruthy();
-  });
-
-  it("should error after entering and removing a character because required", async () => {
-    render(<KitchenSink />);
-    const domNode = screen.getByLabelText("Field") as HTMLInputElement;
-    userEvent.type(domNode, "1");
-    expect(domNode.value).toEqual("1");
-    userEvent.type(domNode, "{backspace}");
-    expect(domNode.value).toEqual("");
-
-    expect(screen.getByTestId(testIds.errorText)).toHaveTextContent(
-      "Yo, Field is required"
-    );
-    expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
-    userEvent.click(screen.getByText("Submit"));
-    expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
-
-    await act(async () => jest.runAllTimers());
-
-    userEvent.click(screen.getByText("Submit"));
-    expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
-  });
-
-  it("should show a custom error when entering '3'", async () => {
-    render(<KitchenSink />);
-    const domNode = screen.getByLabelText("Field") as HTMLInputElement;
-    userEvent.type(domNode, "3");
-    expect(domNode.value).toEqual("3");
-
-    expect(screen.getByTestId(testIds.errorText)).toHaveTextContent(
-      "3 is not allowed!"
-    );
-    expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
-    userEvent.click(screen.getByText("Submit"));
-    expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
-  });
-
-  describe("async", () => {
-    it("should show an async custom error when entering '4'", async () => {
+  describe("field changes", () => {
+    it("no errors for entering in '1'", async () => {
       render(<KitchenSink />);
       const domNode = screen.getByLabelText("Field") as HTMLInputElement;
-      userEvent.type(domNode, "4");
-      expect(domNode.value).toEqual("4");
+      userEvent.type(domNode, "1");
+      expect(domNode.value).toEqual("1");
 
       expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
-      expect(screen.getByTestId(testIds.loading)).toHaveTextContent(
-        "...loading"
-      );
 
+      // Check wait for loading
       expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
       userEvent.click(screen.getByText("Submit"));
       expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
 
       await act(async () => jest.runAllTimers());
 
-      expect(screen.getByTestId(testIds.errorText)).toHaveTextContent(
-        "4 is not allowed async!"
-      );
-      expect(screen.queryByTestId(testIds.loading)).not.toBeTruthy();
+      userEvent.click(screen.getByText("Submit"));
+      expect(screen.getByText(/Valid!/)).toBeTruthy();
+    });
 
+    it("should error after entering and removing a character because required", async () => {
+      render(<KitchenSink />);
+      const domNode = screen.getByLabelText("Field") as HTMLInputElement;
+      userEvent.type(domNode, "1");
+      expect(domNode.value).toEqual("1");
+      userEvent.type(domNode, "{backspace}");
+      expect(domNode.value).toEqual("");
+
+      expect(screen.getByTestId(testIds.errorText)).toHaveTextContent(
+        "Yo, Field is required"
+      );
+      expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+      userEvent.click(screen.getByText("Submit"));
+      expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+
+      await act(async () => jest.runAllTimers());
+
+      userEvent.click(screen.getByText("Submit"));
+      expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+    });
+
+    it("should show a custom error when entering '3'", async () => {
+      render(<KitchenSink />);
+      const domNode = screen.getByLabelText("Field") as HTMLInputElement;
+      userEvent.type(domNode, "3");
+      expect(domNode.value).toEqual("3");
+
+      expect(screen.getByTestId(testIds.errorText)).toHaveTextContent(
+        "3 is not allowed!"
+      );
       expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
       userEvent.click(screen.getByText("Submit"));
       expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
     });
 
-    it("should not show errors when entering '45' before the timeout", async () => {
+    describe("async", () => {
+      it("should show an async custom error when entering '4'", async () => {
+        render(<KitchenSink />);
+        const domNode = screen.getByLabelText("Field") as HTMLInputElement;
+        userEvent.type(domNode, "4");
+        expect(domNode.value).toEqual("4");
+
+        expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
+        expect(screen.getByTestId(testIds.loading)).toHaveTextContent(
+          "...loading"
+        );
+
+        expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+        userEvent.click(screen.getByText("Submit"));
+        expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+
+        await act(async () => jest.runAllTimers());
+
+        expect(screen.getByTestId(testIds.errorText)).toHaveTextContent(
+          "4 is not allowed async!"
+        );
+        expect(screen.queryByTestId(testIds.loading)).not.toBeTruthy();
+
+        expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+        userEvent.click(screen.getByText("Submit"));
+        expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+      });
+
+      it("should not show errors when entering '45' before the timeout", async () => {
+        render(<KitchenSink />);
+        const domNode = screen.getByLabelText("Field") as HTMLInputElement;
+        userEvent.type(domNode, "45");
+        expect(domNode.value).toEqual("45");
+
+        expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
+        expect(screen.getByTestId(testIds.loading)).toHaveTextContent(
+          "...loading"
+        );
+
+        expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+        userEvent.click(screen.getByText("Submit"));
+        expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+
+        await act(async () => jest.runAllTimers());
+
+        expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
+        expect(screen.queryByTestId(testIds.loading)).not.toBeTruthy();
+
+        expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
+        userEvent.click(screen.getByText("Submit"));
+        expect(screen.getByText(/Valid!/)).toBeTruthy();
+      });
+    });
+  });
+
+  describe("simple field changes", () => {
+    it("no errors for entering in '1'", async () => {
       render(<KitchenSink />);
-      const domNode = screen.getByLabelText("Field") as HTMLInputElement;
-      userEvent.type(domNode, "45");
-      expect(domNode.value).toEqual("45");
+      const domNode = screen.getByLabelText("Simple Field") as HTMLInputElement;
+      userEvent.type(domNode, "1");
+      expect(domNode.value).toEqual("1");
 
       expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
-      expect(screen.getByTestId(testIds.loading)).toHaveTextContent(
-        "...loading"
-      );
-
-      expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
-      userEvent.click(screen.getByText("Submit"));
-      expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
-
-      await act(async () => jest.runAllTimers());
-
-      expect(screen.getByTestId(testIds.errorText)).toHaveTextContent("");
-      expect(screen.queryByTestId(testIds.loading)).not.toBeTruthy();
-
-      expect(screen.queryByText(/Valid!/)).not.toBeTruthy();
-      userEvent.click(screen.getByText("Submit"));
-      expect(screen.getByText(/Valid!/)).toBeTruthy();
     });
   });
 });

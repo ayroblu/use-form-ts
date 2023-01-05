@@ -5,7 +5,7 @@ This is a lightweight form style for someone who would normally do it all themse
 ## Installation
 
 ```sh
-yarn add use-form-hook
+yarn add use-form-ts
 ```
 
 ## Getting Started
